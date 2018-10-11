@@ -21,7 +21,7 @@ jobs:
           command: |
             echo "determine which applications need to be built/deployed"
 
-            MODIFIED_FILES=$(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
+            MODIFIED_FILES=$(git whatchanged --name-only --pretty="" HEAD^..HEAD | sort | uniq)
             echo ${MODIFIED_FILES}
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
