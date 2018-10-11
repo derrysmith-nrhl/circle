@@ -30,6 +30,11 @@ jobs:
 
             MODIFIED_PATHS=$(cat ${MODIFIED_DIRS} | sort | uniq)
             echo ${MODIFIED_PATHS}
-      - run:
-          name: build source code
-          command: echo "building source code"
+
+            echo "get all dockerfiles in changed paths"
+
+            for MODIFIED_PATH in ${MODIFIED_PATHS}; do
+              find "${MODIFIED_PATH}"/ -maxdepth 1 -iname "Dockerfile" -type f >> ${MODIFIED_APPS}
+            done
+
+            cat ${MODIFIED_APPS}
