@@ -13,4 +13,5 @@ jobs:
       - checkout
       - run:
           name: build source code
-          commmand: echo "building source code"
+          commmand: |
+            echo "building source code"
