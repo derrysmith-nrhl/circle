@@ -21,14 +21,14 @@ jobs:
           command: |
             echo "determine which applications need to be built/deployed"
 
-            MODIFIED_FILES = $(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
+            MODIFIED_FILES=$(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
             echo ${MODIFIED_FILES}
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
-              dirname ${MODIFIED_FILE} >> ${MODIFIED_DIRS}
+              $(echo ${MODIFIED_FILE} | cut -d "/" -f2) >> ${MODIFIED_DIRS}
             done
 
-            MODIFIED_PATHS = $(cat ${MODIFIED_DIRS} | sort | uniq)
+            MODIFIED_PATHS=$(cat ${MODIFIED_DIRS} | sort | uniq)
             echo ${MODIFIED_PATHS}
       - run:
           name: build source code
