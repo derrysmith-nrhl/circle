@@ -25,7 +25,7 @@ jobs:
             echo ${MODIFIED_FILES}
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
-              $(echo ${MODIFIED_FILE} | cut -d "/" -f2) >> ${MODIFIED_DIRS}
+              echo ${MODIFIED_FILE} | cut -d "/" -f1 >> ${MODIFIED_DIRS}
             done
 
             MODIFIED_PATHS=$(cat ${MODIFIED_DIRS} | sort | uniq)
