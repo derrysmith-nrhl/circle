@@ -1,0 +1,16 @@
+version: 2
+
+workflows:
+  version: 2
+  deployment_pipeline:
+    jobs:
+      - build
+jobs:
+  build:
+    machine: true
+    environment: &environment_variables
+    steps:
+      - checkout
+      - run:
+          name: build source code
+          commmand: echo "building source code"
