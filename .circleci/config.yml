@@ -10,8 +10,7 @@ jobs:
     machine: true
     environment: &environment_variables
       MODIFIED_APPS: /tmp/modified-apps
-      MODIFIED_FILES: /tmp/modified-files
-      MODIFIED_PATHS: /tmp/modified-paths
+      MODIFIED_DIRS: /tmp/modified-dirs
     steps:
       - checkout
       - run:
@@ -21,8 +20,16 @@ jobs:
           name: docker - build and deploy dockerfile(s)
           command: |
             echo "determine which applications need to be built/deployed"
+
             MODIFIED_FILES = $(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
             echo ${MODIFIED_FILES}
+
+            for MODIFIED_FILE in ${MODIFIED_FILES}; do
+              dirname ${MODIFIED_FILE} >> ${MODIFIED_DIRS}
+            done
+
+            MODIFIED_PATHS = $(cat ${MODIFIED_DIRS} | sort | uniq)
+            echo ${MODIFIED_PATHS}
       - run:
           name: build source code
           command: echo "building source code"
