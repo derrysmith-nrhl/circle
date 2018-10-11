@@ -9,8 +9,20 @@ jobs:
   build:
     machine: true
     environment: &environment_variables
+      MODIFIED_APPS: /tmp/modified-apps
+      MODIFIED_FILES: /tmp/modified-files
+      MODIFIED_PATHS: /tmp/modified-paths
     steps:
       - checkout
+      - run:
+          name: docker - authentication
+          command: echo "docker login"
+      - run:
+          name: docker - build and deploy dockerfile(s)
+          command: |
+            echo "determine which applications need to be built/deployed"
+            MODIFIED_FILES = $(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
+            echo ${MODIFIED_FILES}
       - run:
           name: build source code
           command: echo "building source code"
