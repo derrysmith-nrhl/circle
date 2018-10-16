@@ -40,6 +40,6 @@ jobs:
               echo ${dockerfile}
               CONTAINER_JSON=$(find $(dirname ${dockerfile}) -iname "containers.json" -type f)
               CONTAINER_REGX='(.+\/deploy\/)(.+)(\/containers\.json)'
-              CONTAINER_NAME=$([[ ${CONTAINER_JSON} =~ ${CONTAINER_REGX} ]] && echo ${BASH_REMATCH[2]} || "")
-              echo ${CONTAINER_NAME}
+              CONTAINER_NAME=$([[ ${CONTAINER_JSON} =~ ${CONTAINER_REGX} ]] && echo ${BASH_REMATCH[2]} || echo "")
+              echo "${CONTAINER_NAME}:${CIRCLE_SHA1?}"
             done
