@@ -19,19 +19,17 @@ jobs:
       - run:
           name: docker - build and deploy dockerfile(s)
           command: |
-            echo "determine which applications need to be built/deployed"
-
-            MODIFIED_FILES=$(git whatchanged --name-only --pretty="" | sort | uniq)
-            echo ${MODIFIED_FILES}
+            if [ ${CIRCLE_BRANCH} = "master" ]; then
+              MODIFIED_FILES=$(git whatchanged --name-only --pretty="" HEAD^..HEAD | sort | uniq)
+            else
+              MODIFIED_FILES=$(git whatchanged --name-only --pretty="" | sort | uniq)
+            fi
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
               echo ${MODIFIED_FILE} | cut -d "/" -f1 >> ${MODIFIED_DIRS}
             done
 
             MODIFIED_PATHS=$(cat ${MODIFIED_DIRS} | sort | uniq)
-            echo ${MODIFIED_PATHS}
-
-            echo "get all dockerfiles in changed paths"
 
             for MODIFIED_PATH in ${MODIFIED_PATHS}; do
               find "${MODIFIED_PATH}"/ -maxdepth 1 -iname "Dockerfile" -type f >> ${MODIFIED_APPS}
