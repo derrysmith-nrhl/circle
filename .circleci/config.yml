@@ -5,7 +5,7 @@ workflows:
   deployment_pipeline:
     jobs:
       - build
-      - publish
+      - publish:
           requires:
               - build
 jobs:
