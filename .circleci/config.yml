@@ -56,7 +56,7 @@ jobs:
               echo "${CONTAINER_NAME}:${CIRCLE_SHA1?}"
             done
       - persist_to_workspace:
-        root: /tmp
-        paths:
-          - modified-apps
-          - modified-dirs
+          root: /tmp
+          paths:
+            - modified-apps
+            - modified-dirs
