@@ -4,7 +4,7 @@ workflows:
   version: 2
   deployment_pipeline:
     jobs:
-      - compile
+      - build
       - publish
 jobs:
   publish:
@@ -18,7 +18,7 @@ jobs:
       - run:
           name: generic publish step
           command: echo "publishing containers"
-  compile:
+  build:
     machine: true
     environment: &environment_variables
       MODIFIED_APPS: /tmp/modified-apps
