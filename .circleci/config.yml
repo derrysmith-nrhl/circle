@@ -58,7 +58,11 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: /tmp
+          at: /tmp
       - run:
           name: generic publish step
           command: echo "publishing containers"
+  publish-app-1:
+    <<: *publish
+  publish-app-2:
+    <<: *publish
