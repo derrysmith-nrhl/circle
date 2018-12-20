@@ -5,9 +5,16 @@ workflows:
   deployment_pipeline:
     jobs:
       - build
-      - publish:
+      - publish-app-1:
           requires:
-              - build
+            - build
+      - approve-app-1:
+          requires:
+            - publish-app-1
+          type: approval
+      - publish-app-2:
+          requires:
+             - build
 jobs:
   build:
     machine: true
@@ -51,7 +58,7 @@ jobs:
           paths:
             - modified-apps
             - modified-dirs
-  publish:
+  publish: &publish
     machine: true
     environment:
       <<: *environment_variables
@@ -61,4 +68,8 @@ jobs:
           at: /tmp
       - run:
           name: generic publish step
-          command: echo "publishing containers"
+          command: echo "publishing container"
+  publish-app-1:
+    <<: *publish
+  publich-app-2:
+    <<: *publish
