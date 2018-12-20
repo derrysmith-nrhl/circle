@@ -62,7 +62,3 @@ jobs:
       - run:
           name: generic publish step
           command: echo "publishing containers"
-  publish-app-1:
-    <<: *publish
-  publish-app-2:
-    <<: *publish
