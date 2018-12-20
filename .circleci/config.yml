@@ -4,9 +4,21 @@ workflows:
   version: 2
   deployment_pipeline:
     jobs:
-      - build
+      - compile
+      - publish
 jobs:
-  build:
+  publish:
+    machine: true
+    environment:
+      <<: *environment_variables
+    steps:
+      - checkout
+      - attach_workspace:
+        at: /tmp
+      - run:
+          name: generic publish step
+          command: echo "publishing containers"
+  compile:
     machine: true
     environment: &environment_variables
       MODIFIED_APPS: /tmp/modified-apps
@@ -22,7 +34,7 @@ jobs:
             if [ ${CIRCLE_BRANCH} = "master" ]; then
               MODIFIED_FILES=$(git whatchanged --name-only --pretty="" HEAD^..HEAD | sort | uniq)
             else
-              MODIFIED_FILES=$(git whatchanged --name-only --pretty="" | sort | uniq)
+              MODIFIED_FILES=$(git whatchanged --name-only --pretty="" origin..HEAD | sort | uniq)
             fi
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
@@ -43,3 +55,8 @@ jobs:
               CONTAINER_NAME=$([[ ${CONTAINER_JSON} =~ ${CONTAINER_REGX} ]] && echo ${BASH_REMATCH[2]} || echo "")
               echo "${CONTAINER_NAME}:${CIRCLE_SHA1?}"
             done
+      - persist_to_workspace:
+        root: /tmp
+        paths:
+          - modified-apps
+          - modified-dirs
