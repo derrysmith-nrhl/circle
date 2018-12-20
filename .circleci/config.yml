@@ -5,16 +5,30 @@ workflows:
   deployment_pipeline:
     jobs:
       - build
-      - publish-app-1:
+      
+      - publish-app-1-stage:
           requires:
             - build
-      - approve-app-1:
+      - approve-app-1-stage:
           requires:
-            - publish-app-1
+            - publish-app-1-stage
           type: approval
-      - publish-app-2:
+      - approve-app-1-prod:
+          requires:
+            - approve-app-1-stage
+          type: approval
+      
+      - publish-app-2-stage:
           requires:
              - build
+      - approve-app-2-stage:
+          requires:
+            - publish-app-2-stage
+          type: approval
+      - approve-app-2-prod:
+          requires:
+            - approve-app-2-stage
+          type: approval
 jobs:
   build:
     machine: true
@@ -36,7 +50,7 @@ jobs:
             fi
 
             for MODIFIED_FILE in ${MODIFIED_FILES}; do
-              echo $(dirname {MODIFIED_FILE}) | cut -d "/" -f1 >> ${MODIFIED_DIRS}
+              echo ${MODIFIED_FILE} | cut -d "/" -f1 >> ${MODIFIED_DIRS}
             done
 
             MODIFIED_PATHS=$(cat ${MODIFIED_DIRS} | sort | uniq)
@@ -69,7 +83,7 @@ jobs:
       - run:
           name: generic publish step
           command: echo "publishing container"
-  publish-app-1:
+  publish-app-1-stage:
     <<: *publish
-  publich-app-2:
+  publish-app-2-stage:
     <<: *publish
